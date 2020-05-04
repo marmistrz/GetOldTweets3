@@ -118,7 +118,7 @@ class TweetManager:
 
                     results.append(tweet)
                     resultsAux.append(tweet)
-                    
+
                     if receiveBuffer and len(resultsAux) >= bufferLength:
                         receiveBuffer(resultsAux)
                         resultsAux = []
@@ -134,7 +134,7 @@ class TweetManager:
 
         return results
 
-    @staticmethod 
+    @staticmethod
     def getHashtagsAndMentions(tweetPQ):
         """Given a PyQuery instance of a tweet (tweetPQ) getHashtagsAndMentions
         gets the hashtags and mentions from a tweet using the tweet's
@@ -153,7 +153,7 @@ class TweetManager:
                 continue
 
             # Mention anchor tags have a data-mentioned-user-id
-            # attribute. 
+            # attribute.
             if not tagPQ.attr("data-mentioned-user-id") is None:
                 mentions.append("@" + url[1:])
                 continue
@@ -219,7 +219,7 @@ class TweetManager:
             html = match.group(4)
 
             attr = TweetManager.parse_attributes(link)
-            try:   
+            try:
                 if "u-hidden" in attr["class"]:
                     pass
                 elif "data-expanded-url" in attr \
@@ -351,25 +351,10 @@ class TweetManager:
             print(url)
             print('\n'.join(h[0]+': '+h[1] for h in headers))
 
-        try:
-            response = opener.open(url)
-            jsonResponse = response.read()
-        except Exception as e:
-            print("An error occured during an HTTP request:", str(e))
-            print("Try to open in browser: https://twitter.com/search?q=%s&src=typd" % urllib.parse.quote(urlGetData))
-            sys.exit()
-
-        try:
-            s_json = jsonResponse.decode()
-        except:
-            print("Invalid response from Twitter")
-            sys.exit()
-
-        try:
-            dataJson = json.loads(s_json)
-        except:
-            print("Error parsing JSON: %s" % s_json)
-            sys.exit()
+        response = opener.open(url)
+        jsonResponse = response.read()
+        s_json = jsonResponse.decode()
+        dataJson = json.loads(s_json)
 
         if debug:
             print(s_json)
